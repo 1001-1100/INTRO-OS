@@ -1,90 +1,24 @@
+import java.awt.EventQueue;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.File; 
+import java.io.FileOutputStream; 
+import java.io.IOException; 
 import java.io.InputStream;
-import java.util.Random;
+
 public class Main {
 
 	public static void main(String args[]) {
-		new Main();
-		Random rand = new Random();
-		Monitor monitor = new Monitor();
-		Thread t = new Thread() {
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				while(true) {
-					monitor.procedure("First thread");	
-					try {
-						sleep(rand.nextInt(10)+1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				try {
+					Main main = new Main();
+					Interface.getInstance();
+					CalTrain.getInstance();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		};
-		Thread t2 = new Thread() {
-			public void run() {
-				while(true) {
-					monitor.procedure("Second thread");
-					try {
-						sleep(rand.nextInt(10)+1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			}
-		};
-		Thread t3 = new Thread() {
-			public void run() {
-				while(true) {
-					monitor.procedure("Third thread");
-					try {
-						sleep(rand.nextInt(10)+1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			}
-		};
-		Thread t4 = new Thread() {
-			public void run() {
-				while(true) {
-					monitor.procedure("Fourth thread");
-					try {
-						sleep(rand.nextInt(10)+1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			}
-		};
-		Thread t5 = new Thread() {
-			public void run() {
-				while(true) {
-					monitor.procedure("Fifth thread");
-					try {
-						sleep(rand.nextInt(10)+1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			}
-		};
-		t.start();
-		t2.start();
-		t3.start();
-		t4.start();
-		t5.start();
-	
+		});
 	}
 	
 	//For testing purposes, ignore	

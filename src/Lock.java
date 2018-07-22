@@ -8,12 +8,17 @@ public class Lock {
 	}
 	
 	public synchronized void lock_acquire() {
-		while(i <= 0);
+		while(i <= 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {}
+		}
 		i -= 1;
 	}
 	
-	public void lock_release() {
+	public synchronized void lock_release() {
 		i += 1;
+		this.notify();
 	}
 	
 }

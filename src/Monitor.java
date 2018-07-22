@@ -1,39 +1,29 @@
 public class Monitor {
 	
-	int data;
+	int i;
 	Lock monitorLock;
 	Condition cond;
 	
 	public Monitor() {
 		(monitorLock = new Lock()).lock_init();
 		(cond = new Condition()).cond_init();
+		i = 0;
 	}
 	
-	public void procedure(String obj) {
+	public void increment() {
 		monitorLock.lock_acquire();
-		data++;
-		System.out.println(obj+" : "+data);
+		i += 1;
+		cond.cond_wait(monitorLock);
+	}
+	
+	public void decrement() {
+		monitorLock.lock_acquire();
+		while(i > 0) {
+			i -= 1;
+			cond.cond_signal(monitorLock);
+			monitorLock.lock_acquire();
+		}
 		monitorLock.lock_release();
-	}
-
-	//Train
-	public void station_load_train(Station station, int count) {
-		
-	}	
-	
-	//Passenger
-	public void station_wait_for_train(Station station) {
-		
-	}
-	
-	//Passenger
-	public void station_on_board(Station station) {
-		
-	}
-	
-	//Start
-	public void station_init() {
-		
 	}
 	
 }

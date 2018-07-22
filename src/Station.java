@@ -11,10 +11,11 @@ public class Station {
 	}
 	
 	//Train
-	public void station_load_train(int count) {
+	public int station_load_train(int count) {
 		trainLock.lock_acquire();
-		passengerMonitor.decrement();
+		count = passengerMonitor.decrement(count);
 		trainLock.lock_release();
+		return count;
 	}	
 	
 	//Passenger

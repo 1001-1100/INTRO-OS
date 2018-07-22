@@ -14,16 +14,19 @@ public class Monitor {
 		monitorLock.lock_acquire();
 		i += 1;
 		cond.cond_wait(monitorLock);
+		monitorLock.lock_release();
 	}
 	
-	public void decrement() {
+	public int decrement(int count) {
 		monitorLock.lock_acquire();
-		while(i > 0) {
+		while(i > 0 && count > 0) {
 			i -= 1;
+			count -= 1;
 			cond.cond_signal(monitorLock);
 			monitorLock.lock_acquire();
 		}
 		monitorLock.lock_release();
+		return count;
 	}
 	
 }

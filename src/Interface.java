@@ -9,6 +9,9 @@ import javax.swing.border.MatteBorder;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Interface {
 
@@ -16,7 +19,7 @@ public class Interface {
 	private JFrame frame;
 	private JTextField totalPassenger;
 	private JTextField totalTrain;
-	private JTextField textField;
+	private JTextField waitingPassenger;
 	private JTextArea consoleText;
 	
 	private Interface() {
@@ -34,11 +37,15 @@ public class Interface {
 		totalPassenger.setText(Integer.toString(totalPassengers));
 	}
 	
+	public void setWaitingPassenger(int waitingPassengers) {
+		waitingPassenger.setText(Integer.toString(waitingPassengers));
+	}
+	
 	public void setTotalTrain(int totalTrains) {
 		totalTrain.setText(Integer.toString(totalTrains));
 	}
 	
-	public void updateConsole(String text) {
+	public synchronized void updateConsole(String text) {
 		consoleText.append(text+"\n");
 	}
 	
@@ -86,11 +93,18 @@ public class Interface {
 		
 		JLabel lblWaitPassenger = new JLabel("Waiting Passengers:");
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setColumns(10);
+		waitingPassenger = new JTextField();
+		waitingPassenger.setEditable(false);
+		waitingPassenger.setColumns(10);
 		
 		JScrollPane consoleScroll = new JScrollPane();
+		
+		JButton btnStartSimulation = new JButton("Start Simulation");
+		btnStartSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CalTrain.getInstance();
+			}
+		});
 		GroupLayout gl_infoPanel = new GroupLayout(infoPanel);
 		gl_infoPanel.setHorizontalGroup(
 			gl_infoPanel.createParallelGroup(Alignment.LEADING)
@@ -98,19 +112,26 @@ public class Interface {
 					.addContainerGap()
 					.addGroup(gl_infoPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_infoPanel.createSequentialGroup()
-							.addComponent(lblTotalPassenger)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(totalPassenger, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(consoleScroll, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+							.addContainerGap())
 						.addGroup(gl_infoPanel.createSequentialGroup()
-							.addComponent(lblWaitPassenger)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_infoPanel.createSequentialGroup()
-							.addComponent(lblTotalTrain)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(totalTrain, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(consoleScroll, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))
-					.addContainerGap())
+							.addGroup(gl_infoPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_infoPanel.createSequentialGroup()
+									.addComponent(lblTotalPassenger)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(totalPassenger, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel.createSequentialGroup()
+									.addComponent(lblWaitPassenger)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(waitingPassenger, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_infoPanel.createSequentialGroup()
+									.addComponent(lblTotalTrain)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(totalTrain, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addContainerGap(79, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, gl_infoPanel.createSequentialGroup()
+							.addComponent(btnStartSimulation)
+							.addGap(80))))
 		);
 		gl_infoPanel.setVerticalGroup(
 			gl_infoPanel.createParallelGroup(Alignment.LEADING)
@@ -122,14 +143,16 @@ public class Interface {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblWaitPassenger)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(waitingPassenger, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_infoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTotalTrain)
 						.addComponent(totalTrain, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(consoleScroll, GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-					.addGap(283))
+					.addComponent(consoleScroll, GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnStartSimulation)
+					.addContainerGap())
 		);
 		
 		consoleText = new JTextArea();

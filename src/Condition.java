@@ -19,9 +19,9 @@ public class Condition {
 				}
 			} catch (InterruptedException e) {}
 		}
+		lock.lock_acquire();
 		wait -= 1;
 		signal -= 1;
-		lock.lock_acquire();
 	}
 	
 	public void cond_signal(Lock lock) {

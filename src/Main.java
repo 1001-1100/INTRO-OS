@@ -13,7 +13,6 @@ public class Main {
 				try {
 					Main main = new Main();
 					Interface.getInstance();
-					CalTrain.getInstance();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

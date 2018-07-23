@@ -68,7 +68,7 @@ public class Interface {
 	
 	public void addTrain() {
 		JLabel train = new JLabel();
-		train.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\train.png"));
+		train.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
 		train.setBounds(260, 670, 60, 136);
 		trains.add(train);
 		graphicalPanel.add(train);
@@ -87,7 +87,7 @@ public class Interface {
 			if(fromStart) {
 				initSpeed = 1;
 			}else {
-				initSpeed = 50;
+				initSpeed = 25;
 			}
 			int initDistance = trains.get(trainID).getY() - stations[toStation][1];
 			int distance = initDistance;
@@ -117,12 +117,10 @@ public class Interface {
 				if(fromStart) {
 					initSpeed = 1;
 				}else {
-					initSpeed = 50;
+					initSpeed = 25;
 				}
-				int initDistance = trains.get(trainID).getY() - (-150);
-				int distance = initDistance;
 				while(trains.get(trainID).getY() > (-150)) {
-					if(initSpeed > 1 && distance > initDistance/2 && distance % 2 == 1) {
+					if(initSpeed > 1) {
 						initSpeed -= 1;
 					}
 					trains.get(trainID).setLocation(trains.get(trainID).getX(), trains.get(trainID).getY()-1);
@@ -141,12 +139,10 @@ public class Interface {
 				if(fromStart) {
 					initSpeed = 1;
 				}else {
-					initSpeed = 50;
+					initSpeed = 25;
 				}
-				int initDistance = trains.get(trainID).getY() - (-150);
-				int distance = initDistance;
 				while(trains.get(trainID).getY() > (-150)) {
-					if(initSpeed > 1 && distance > initDistance/2 && distance % 2 == 1) {
+					if(initSpeed > 1) {
 						initSpeed -= 1;
 					}
 					trains.get(trainID).setLocation(trains.get(trainID).getX(), trains.get(trainID).getY()-1);
@@ -165,12 +161,10 @@ public class Interface {
 				if(fromStart) {
 					initSpeed = 1;
 				}else {
-					initSpeed = 50;
+					initSpeed = 25;
 				}
-				int initDistance = trains.get(trainID).getY() - (-150);
-				int distance = initDistance;
 				while(trains.get(trainID).getY() > (-150)) {
-					if(initSpeed > 1 && distance > initDistance/2 && distance % 2 == 1) {
+					if(initSpeed > 1) {
 						initSpeed -= 1;
 					}
 					trains.get(trainID).setLocation(trains.get(trainID).getX(), trains.get(trainID).getY()-1);
@@ -252,14 +246,9 @@ public class Interface {
 		
 		JLabel background = new JLabel("");
 		graphicalPanel.setLayer(background, -1);
-		background.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\mapSmall.png"));
+		background.setIcon(new ImageIcon(Interface.class.getResource("/mapSmall.png")));
 		background.setBounds(0, 0, 947, 670);
 		graphicalPanel.add(background);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\train.png"));
-		lblNewLabel.setBounds(260, -150, 60, 130);
-		graphicalPanel.add(lblNewLabel);
 		
 		JLabel lblTotalPassenger = new JLabel("Total Passengers:");
 		

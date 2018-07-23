@@ -29,6 +29,11 @@ public class CalTrain {
 		return calTrain;
 	}
 	
+	public void removeWaitingPassenger() {
+		waitingPassengers -= 1;
+		Interface.getInstance().setWaitingPassenger(waitingPassengers);
+	}
+	
 	public void generatePassengers() {
 		Thread t = new Thread() {
 			public void run() {
@@ -56,16 +61,14 @@ public class CalTrain {
 		Thread t = new Thread() {
 			public void run() {
 				Train t;
-				while(true) {
-					t = new Train(stations);	
-					totalTrains += 1;
-					Interface.getInstance().setTotalTrain(totalTrains);
-					try {
-						sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				t = new Train(stations);	
+				totalTrains += 1;
+				Interface.getInstance().setTotalTrain(totalTrains);
+				try {
+					sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		};

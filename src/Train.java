@@ -8,7 +8,7 @@ public class Train {
 	
 	public Train(Station[] stations) {
 		Random rand = new Random();
-		remainingSeats = rand.nextInt(10);
+		remainingSeats = rand.nextInt(9)+1;
 		currentId = Train.id;
 		Train.id += 1;
 		Interface.getInstance().updateConsole("Train with "+remainingSeats+" seats spawned!");

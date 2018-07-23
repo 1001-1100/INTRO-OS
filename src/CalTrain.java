@@ -10,9 +10,13 @@ public class CalTrain {
 	
 	private CalTrain() {
 		totalPassengers = 0;
+		waitingPassengers = 0;
 		totalTrains = 0;
-		stations = new Station[8];
-		for(int i = 0 ; i < 8 ; i++)
+		Interface.getInstance().setTotalPassenger(totalPassengers);
+		Interface.getInstance().setWaitingPassenger(waitingPassengers);
+		Interface.getInstance().setTotalTrain(totalTrains);
+		stations = new Station[10];
+		for(int i = 0 ; i < 10 ; i++)
 			(stations[i] = new Station()).station_init();
 		generatePassengers();
 		generateTrains();
@@ -53,13 +57,15 @@ public class CalTrain {
 			public void run() {
 				Train t;
 				while(true) {
+					t = new Train(stations);	
+					totalTrains += 1;
+					Interface.getInstance().setTotalTrain(totalTrains);
 					try {
 						sleep(5000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					t = new Train(stations);					
 				}
 			}
 		};

@@ -8,14 +8,14 @@ public class Passenger {
 	
 	public Passenger(Station[] stations) {
 		Random rand = new Random();
-		stationNumber = rand.nextInt(7);
-		Passenger.id += 1;
+		stationNumber = rand.nextInt(10);
 		currentId = Passenger.id;
+		Passenger.id += 1;
 		Thread t = new Thread() {
 			public void run() {
-				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber+1));
+				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber));
 				stations[stationNumber].station_wait_for_train();
-				Interface.getInstance().updateConsole("Passenger "+currentId+" boarded at Station "+(stationNumber+1));
+				Interface.getInstance().updateConsole("Passenger "+currentId+" boarded at Station "+(stationNumber));
 			}
 		};
 		t.start();

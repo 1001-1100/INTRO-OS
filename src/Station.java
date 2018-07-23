@@ -15,6 +15,12 @@ public class Station {
 		trainLock.lock_acquire();
 		count = passengerMonitor.decrement(count);
 		trainLock.lock_release();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return count;
 	}	
 	

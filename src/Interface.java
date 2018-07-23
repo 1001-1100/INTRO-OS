@@ -85,7 +85,7 @@ public class Interface {
 		Random rand = new Random();
 		int randNum = rand.nextInt(2);
 		JLabel passenger = new JLabel();
-		passenger.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bMoveRight.png"));
+		passenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveRight.png")));
 		if(stationNumber == 1) {
 			passenger.setBounds(stationEntrance[0][0], stationEntrance[0][1], 84, 73);
 		}else if(stationNumber == 2) {
@@ -141,7 +141,7 @@ public class Interface {
 			}
 		}
 		//passengers.get(passengerID).setLocation(passengers.get(passengerID).getX(), passengers.get(passengerID).getY());
-		passengers.get(passengerID).setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bRight.gif"));
+		passengers.get(passengerID).setIcon(new ImageIcon(Interface.class.getResource("/2bRight.gif")));
 		stationPassengerAmount[stationNumber] += 1;
 	}
 	
@@ -384,42 +384,6 @@ public class Interface {
 		background.setIcon(new ImageIcon(Interface.class.getResource("/mapSmall.png")));
 		background.setBounds(0, 0, 947, 670);
 		graphicalPanel.add(background);
-		
-		JLabel label = new JLabel("");
-		graphicalPanel.setLayer(label, -2);
-		label.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bRight.gif"));
-		label.setBounds(198, 290, 60, 73);
-		graphicalPanel.add(label);
-		
-		JLabel label_1 = new JLabel("");
-		graphicalPanel.setLayer(label_1, -2);
-		label_1.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bRight.gif"));
-		label_1.setBounds(178, 290, 60, 73);
-		graphicalPanel.add(label_1);
-		
-		JLabel label_2 = new JLabel("");
-		graphicalPanel.setLayer(label_2, -3);
-		label_2.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bMoveRight.png"));
-		label_2.setBounds(184, 290, 84, 71);
-		graphicalPanel.add(label_2);
-		
-		JLabel label_3 = new JLabel((String) null);
-		label_3.setBounds(169, 249, 6, 14);
-		graphicalPanel.add(label_3);
-		
-		JLabel label_4 = new JLabel("");
-		label_4.setBounds(507, 290, 60, 73);
-		graphicalPanel.add(label_4);
-		
-		JLabel label_5 = new JLabel("");
-		label_5.setBounds(819, 290, 60, 73);
-		graphicalPanel.add(label_5);
-		
-		JLabel label_6 = new JLabel("");
-		graphicalPanel.setLayer(label_6, -2);
-		label_6.setIcon(new ImageIcon("C:\\Users\\Nine\\Desktop\\2bMoveRight.png"));
-		label_6.setBounds(672, 135, 84, 71);
-		graphicalPanel.add(label_6);
 		
 		JLabel lblTotalPassenger = new JLabel("Total Passengers Arrived:");
 		

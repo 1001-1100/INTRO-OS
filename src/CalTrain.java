@@ -60,15 +60,18 @@ public class CalTrain {
 	public void generateTrains() {
 		Thread t = new Thread() {
 			public void run() {
+				Random rand = new Random();
 				Train t;
-				t = new Train(stations);	
-				totalTrains += 1;
-				Interface.getInstance().setTotalTrain(totalTrains);
-				try {
-					sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				while(true) {
+					t = new Train(stations);	
+					totalTrains += 1;
+					Interface.getInstance().setTotalTrain(totalTrains);
+					try {
+						sleep(rand.nextInt(5000)+5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		};

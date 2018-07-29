@@ -363,7 +363,7 @@ public class Interface {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
+					.addGap(19)
 					.addComponent(graphicalPanel, GroupLayout.DEFAULT_SIZE, 953, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(infoPanel, GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE)
@@ -371,19 +371,13 @@ public class Interface {
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(infoPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
-						.addComponent(graphicalPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(graphicalPanel, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+						.addComponent(infoPanel, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
 					.addContainerGap())
 		);
-		
-		JLabel background = new JLabel("");
-		graphicalPanel.setLayer(background, -1);
-		background.setIcon(new ImageIcon(Interface.class.getResource("/mapSmall.png")));
-		background.setBounds(0, 0, 947, 670);
-		graphicalPanel.add(background);
 		
 		JLabel lblTotalPassenger = new JLabel("Total Passengers Arrived:");
 		

@@ -5,7 +5,7 @@ public class Passenger {
 	static int id = 0;
 	int currentId;
 	int stationNumber;
-	
+	 
 	public Passenger(Station[] stations) {
 		Random rand = new Random();
 		stationNumber = rand.nextInt(5) + 5;

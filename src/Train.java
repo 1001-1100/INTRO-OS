@@ -2,24 +2,20 @@ import java.util.Random;
 
 public class Train {
 
-	static int id = 0;
-	int currentId;
+	int currentStation;
 	int remainingSeats;
 	
 	public Train(Station[] stations) {
 		Random rand = new Random();
-		remainingSeats = rand.nextInt(8)+4;
-		currentId = Train.id;
-		Train.id += 1;
+		remainingSeats = rand.nextInt(9)+99;
 		Interface.getInstance().updateConsole("Train with "+remainingSeats+" seats spawned!");
-		Interface.getInstance().addTrain();
 		Thread t = new Thread() {
 			public void run() {
-				for(int i = 0 ; i < 10 ; i++) {
-					remainingSeats = stations[i].station_load_train(remainingSeats);
-					Interface.getInstance().moveTrain(currentId, i, i+1, i==0);
-				}
-				Interface.getInstance().updateConsole("Train has ended!");
+				//while(true) {
+					for(currentStation = 0; currentStation < 8 ; currentStation++) {
+						remainingSeats = stations[currentStation].station_load_train(remainingSeats);
+					}					
+				//}
 			}
 		};
 		t.start();

@@ -7,6 +7,7 @@ public class CalTrain {
 	private int totalPassengers;
 	private int waitingPassengers;
 	private int totalTrains;
+	private boolean turboMode = true;
 	
 	private CalTrain() {
 		totalPassengers = 0;
@@ -15,9 +16,13 @@ public class CalTrain {
 		Interface.getInstance().setTotalPassenger(totalPassengers);
 		Interface.getInstance().setWaitingPassenger(waitingPassengers);
 		Interface.getInstance().setTotalTrain(totalTrains);
-		stations = new Station[10];
-		for(int i = 0 ; i < 10 ; i++)
-			(stations[i] = new Station()).station_init();
+		stations = new Station[8];
+		for(int i = 0 ; i < 8 ; i++) {
+			stations[i] = new Station();
+			stations[i].stationNumber = i;
+			stations[i].station_init();
+		}
+			
 		generatePassengers();
 		generateTrains();
 	}
@@ -27,6 +32,10 @@ public class CalTrain {
 			calTrain = new CalTrain();
 		}
 		return calTrain;
+	}
+	
+	public boolean isTurbo() {
+		return turboMode;
 	}
 	
 	public void removeWaitingPassenger() {
@@ -45,12 +54,14 @@ public class CalTrain {
 					waitingPassengers += 1;
 					Interface.getInstance().setTotalPassenger(totalPassengers);
 					Interface.getInstance().setWaitingPassenger(waitingPassengers);
-					try {
-						sleep(rand.nextInt(1000)+100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
+					//if(!CalTrain.getInstance().isTurbo()) {
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					//}				
 				}
 			}
 		};
@@ -66,12 +77,14 @@ public class CalTrain {
 					t = new Train(stations);	
 					totalTrains += 1;
 					Interface.getInstance().setTotalTrain(totalTrains);
-					try {
-						sleep(rand.nextInt(5000)+5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					//if(!CalTrain.getInstance().isTurbo()) {
+						try {
+							Thread.sleep(5000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					//}
 				}
 			}
 		};

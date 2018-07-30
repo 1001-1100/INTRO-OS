@@ -13,10 +13,7 @@ public class Main {
 				try {
 					Main main = new Main();
 					//847, 465
-					StartStation t1 = new StartStation(0,465, "Train Station 1 and 2");
-					TrainStations t2 = new TrainStations(0,0, "Train Station 3 and 4");
-					TrainStations t3 = new TrainStations(847,465, "Train Station 5 and 6");
-					EndStation t4 = new EndStation(847,0, "Train Station 7 and 8");
+					Interface.getInstance();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

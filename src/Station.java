@@ -1,26 +1,39 @@
 
 public class Station {
 	
+	int stationNumber;
 	Lock trainLock;
 	Monitor passengerMonitor;
 	
 	//Start
 	public void station_init() {
 		(trainLock = new Lock()).lock_init();
-		passengerMonitor = new Monitor();
+		passengerMonitor = new Monitor(stationNumber);
 	}
 	
 	//Train
 	public int station_load_train(int count) {
 		trainLock.lock_acquire();
+		Interface.getInstance().updateStationLock(stationNumber, true);
+		Interface.getInstance().addTrain(stationNumber);
+		if(!CalTrain.getInstance().isTurbo()) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		count = passengerMonitor.decrement(count);
-		trainLock.lock_release();
+		Interface.getInstance().removeTrain(stationNumber);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Interface.getInstance().updateStationLock(stationNumber, false);
+		trainLock.lock_release();
 		return count;
 	}	
 	

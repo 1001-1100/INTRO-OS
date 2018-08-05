@@ -31,11 +31,14 @@ public class TrainCondition {
 		wait -= 1;
 		//Interface.getInstance().updateWaitingAmount(stationNumber, wait);
 		signal -= 1;
+		synchronized(this) {
+			notifyAll();
+		}	
 	}
 	
 	public void cond_signal(Lock lock) {
 		if(wait > 0) {
-			signal += 1;
+			signal = 1;
 			//Interface.getInstance().updateMonitorLock(stationNumber, false);
 			synchronized(this) {
 				notify();
@@ -54,6 +57,21 @@ public class TrainCondition {
 			lock.lock_release();
 		}
 	}	
+	
+	public void cond_check(Lock lock) {
+		lock.lock_release();
+		if(signal > 0) {
+			try {
+				synchronized(this) {
+					wait();
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		lock.lock_acquire();
+	}
 
 	
 }

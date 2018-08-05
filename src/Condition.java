@@ -35,7 +35,7 @@ public class Condition {
 	
 	public void cond_signal(Lock lock) {
 		if(wait > 0) {
-			signal += 1;
+			signal = 1;
 			Interface.getInstance().updateMonitorLock(stationNumber, false);
 			synchronized(this) {
 				notify();

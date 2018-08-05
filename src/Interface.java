@@ -70,6 +70,34 @@ public class Interface {
 		cB.demobilizeTrain(trainNumber);
 	}	
 	
+	public void updateTrainTaken(int trainNumber, int taken) {
+		cB.updateTrainTaken(trainNumber, taken);
+	}
+	
+	public void updateTrainStation(int trainNumber, int station) {
+		cB.updateTrainStation(trainNumber, station);
+	}
+	
+	public void unloadPassenger(int stationNumber) {
+		if(stationNumber == 0) {
+			t1.unloadLeftPassenger();
+		}else if(stationNumber == 1) {
+			t2.unloadLeftPassenger();
+		}else if(stationNumber == 2) {
+			t3.unloadLeftPassenger();
+		}else if(stationNumber == 3) {
+			t4.unloadLeftPassenger();
+		}else if(stationNumber == 4) {
+			t4.unloadRightPassenger();
+		}else if(stationNumber == 5) {
+			t3.unloadRightPassenger();
+		}else if(stationNumber == 6) {
+			t2.unloadRightPassenger();
+		}else if(stationNumber == 7) {
+			t1.unloadRightPassenger();
+		}	
+	}
+	
 	public void addPassenger(int stationNumber) {
 		if(stationNumber == 0) {
 			t1.addLeftPassenger();
@@ -199,6 +227,14 @@ public class Interface {
 	
 	public int getPassengerSpeed() {
 		return 16-cB.getPassengerSpeed();
+	}
+	
+	public int getTrainRate() {
+		return 105-cB.getTrainRate();
+	}
+	
+	public int getPassengerRate() {
+		return 2100-cB.getPassengerRate();
 	}
 	
 	private void initialize() {

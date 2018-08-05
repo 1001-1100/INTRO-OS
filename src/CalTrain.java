@@ -44,6 +44,10 @@ public class CalTrain {
 		return turboMode;
 	}
 	
+	public Train getTrain(int trainNumber) {
+		return trains[trainNumber];
+	}
+	
 	public void removeWaitingPassenger() {
 		waitingPassengers -= 1;
 		Interface.getInstance().setWaitingPassenger(waitingPassengers);
@@ -62,10 +66,45 @@ public class CalTrain {
 		generateTrains();
 	}
 	
+	public void addAvailableTrain(int trainNumber) {
+		availableTrains.add(trainNumber);
+	}
+	
+	public void generatePassenger(int stationNumber, int destNumber) {
+		Thread t = new Thread() {
+			public void run() {
+				new Passenger(stations, stationNumber, destNumber);
+				totalPassengers += 1;
+				waitingPassengers += 1;
+				Interface.getInstance().setTotalPassenger(totalPassengers);
+				Interface.getInstance().setWaitingPassenger(waitingPassengers);
+			}
+		};
+		t.start();
+	}
+	
+	public void generateTrain(int trainNumber, int totalSeats) {
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					if(availableTrains.contains(trainNumber)) {
+						trains[trainNumber] = new Train(stations,trainNumber,totalSeats);	
+						availableTrains.remove(availableTrains.indexOf(trainNumber));
+						totalTrains += 1;
+						Interface.getInstance().setTotalTrain(totalTrains);
+					}
+				} catch (NullPointerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}					
+			}
+		};
+		t.start();
+	}
+	
 	public void generatePassengers() {
 		Thread t = new Thread() {
 			public void run() {
-				Random rand = new Random();
 				Passenger p;
 				while(isAuto) {
 					p = new Passenger(stations);
@@ -74,7 +113,7 @@ public class CalTrain {
 					Interface.getInstance().setTotalPassenger(totalPassengers);
 					Interface.getInstance().setWaitingPassenger(waitingPassengers);
 					try {
-						Thread.sleep(1500);
+						Thread.sleep(Interface.getInstance().getPassengerRate());
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -88,25 +127,37 @@ public class CalTrain {
 	public void generateTrains() {
 		Thread t = new Thread() {
 			public void run() {
-				Random rand = new Random();
-				Train t;
 				while(isAuto) {
-					if(availableTrains.get(0) != null) {
-						t = new Train(stations,availableTrains.get(0));	
-						availableTrains.remove(0);
-						totalTrains += 1;
-						Interface.getInstance().setTotalTrain(totalTrains);
-						try {
-							Thread.sleep(5000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					try {
+						if(availableTrains.get(0) != null) {
+							trains[availableTrains.get(0)] = new Train(stations,availableTrains.get(0));	
+							availableTrains.remove(0);
+							totalTrains += 1;
+							Interface.getInstance().setTotalTrain(totalTrains);
+							try {
+								Thread.sleep(Interface.getInstance().getTrainRate()*100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
+					} catch (NullPointerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
 		};
 		t.start();
+	}
+	
+	public void demobilizeTrain(int trainNumber) {
+		try {
+			trains[trainNumber].demobilize();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

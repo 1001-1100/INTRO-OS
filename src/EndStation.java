@@ -45,11 +45,75 @@ public class EndStation {
 	rightPassenger idle: 495 131
  */
 	
+	public void unloadLeftPassenger() {
+		leftPassengerSpriteLock.lock_acquire();
+		JLabel leftPassenger = new JLabel();
+		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveLeft.png")));
+		leftPassenger.setBounds(356, 135, 84, 73);
+		graphicalPanel.setLayer(leftPassenger, -1);
+		graphicalPanel.add(leftPassenger);
+		while(leftPassenger.getX() != 85 || leftPassenger.getY() != 240) {
+			if(leftPassenger.getX() > 85) {
+				leftPassenger.setLocation(leftPassenger.getX()-1,leftPassenger.getY());
+			}
+			if(leftPassenger.getY() > 240) {
+				leftPassenger.setLocation(leftPassenger.getX(),leftPassenger.getY()-1);
+			}
+			if(leftPassenger.getY() < 240) {
+				leftPassenger.setLocation(leftPassenger.getX(),leftPassenger.getY()+1);
+			}
+			try {
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+//		leftPassenger.setLocation(278-(20*leftPassengers.size()), 130);
+//		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2Right.gif")));
+//		leftPassengers.add(leftPassenger);
+		graphicalPanel.remove(leftPassenger);
+		graphicalPanel.repaint();
+		leftPassengerSpriteLock.lock_release();		
+	}
+	
+	public void unloadRightPassenger() {
+		rightPassengerSpriteLock.lock_acquire();
+		JLabel rightPassenger = new JLabel();
+		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveRight.png")));
+		rightPassenger.setBounds(420, 135, 84, 73);
+		graphicalPanel.setLayer(rightPassenger, -1);
+		graphicalPanel.add(rightPassenger);
+		while(rightPassenger.getX() != 646 || rightPassenger.getY() != 240) {
+			if(rightPassenger.getX() < 646) {
+				rightPassenger.setLocation(rightPassenger.getX()+1,rightPassenger.getY());
+			}
+			if(rightPassenger.getY() > 240) {
+				rightPassenger.setLocation(rightPassenger.getX(),rightPassenger.getY()-1);
+			}
+			if(rightPassenger.getY() < 240) {
+				rightPassenger.setLocation(rightPassenger.getX(),rightPassenger.getY()+1);
+			}
+			try {
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+//		rightPassenger.setLocation(495+(20*rightPassengers.size()), 130);
+//		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2Left.gif")));
+		graphicalPanel.remove(rightPassenger);
+		graphicalPanel.repaint();
+		rightPassengerSpriteLock.lock_release();	
+	}	
+	
 	public void addLeftPassenger() {
 		leftPassengerSpriteLock.lock_acquire();
 		JLabel leftPassenger = new JLabel();
 		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveRight.png")));
 		leftPassenger.setBounds(85, 240, 84, 73);
+		graphicalPanel.setLayer(leftPassenger, -1);
 		graphicalPanel.add(leftPassenger);
 		while(leftPassenger.getX() != 260-(20*leftPassengers.size()) || leftPassenger.getY() != 135) {
 			if(leftPassenger.getX() < 260-(20*leftPassengers.size())) {
@@ -80,6 +144,7 @@ public class EndStation {
 		JLabel rightPassenger = new JLabel();
 		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveLeft.png")));
 		rightPassenger.setBounds(646, 240, 84, 73);
+		graphicalPanel.setLayer(rightPassenger, -1);
 		graphicalPanel.add(rightPassenger);
 		while(rightPassenger.getX() != 494+(20*rightPassengers.size()) || rightPassenger.getY() != 135) {
 			if(rightPassenger.getX() > 494+(20*rightPassengers.size())) {
@@ -107,16 +172,36 @@ public class EndStation {
 	
 	public void removeLeftPassenger() {
 		leftPassengerSpriteLock.lock_acquire();
-		graphicalPanel.remove(leftPassengers.get(0));
+		JLabel leftPassenger = leftPassengers.get(0);
 		leftPassengers.remove(0);
 		leftPassengerSpriteLock.lock_release();
+		while(leftPassenger.getX() != 356) {
+			leftPassenger.setLocation(leftPassenger.getX()+1, leftPassenger.getY());
+			try {
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		graphicalPanel.remove(leftPassenger);
 	}
 	
 	public void removeRightPassenger() {
 		rightPassengerSpriteLock.lock_acquire();
-		graphicalPanel.remove(rightPassengers.get(0));
+		JLabel rightPassenger = rightPassengers.get(0);
 		rightPassengers.remove(0);
 		rightPassengerSpriteLock.lock_release();
+		while(rightPassenger.getX() != 420) {
+			rightPassenger.setLocation(rightPassenger.getX()-1, rightPassenger.getY());
+			try {
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		graphicalPanel.remove(rightPassenger);
 	}
 	
 	public void addLeftTrain() {
@@ -217,7 +302,7 @@ public class EndStation {
 		graphicalPanel = new JLayeredPane();
 		
 		JLabel background = new JLabel("");
-		graphicalPanel.setLayer(background, -1);
+		graphicalPanel.setLayer(background, -2);
 		background.setIcon(new ImageIcon(EndStation.class.getResource("/quarterMap.png")));
 		background.setBounds(0, -20, 832, 448);
 		graphicalPanel.add(background);

@@ -15,9 +15,9 @@ public class Passenger {
 		Passenger.id += 1;
 		Thread t = new Thread() {
 			public void run() {
-				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber));
+				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber+1)+" -> "+(destNumber+1));
 				stations[stationNumber].station_wait_for_train();
-				Interface.getInstance().updateConsole("Passenger "+currentId+" boarded at Station "+(stationNumber));
+				stations[stationNumber].station_on_board(destNumber);
 			}
 		};
 		t.start();
@@ -30,9 +30,9 @@ public class Passenger {
 		Passenger.id += 1;
 		Thread t = new Thread() {
 			public void run() {
-				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber));
+				Interface.getInstance().updateConsole("Passenger "+currentId+" waiting at Station "+(stationNumber+1)+" -> "+(destNumber+1));
 				stations[stationNumber].station_wait_for_train();
-				Interface.getInstance().updateConsole("Passenger "+currentId+" boarded at Station "+(stationNumber));
+				stations[stationNumber].station_on_board(destNumber);
 			}
 		};
 		t.start();

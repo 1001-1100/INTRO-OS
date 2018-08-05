@@ -36,12 +36,22 @@ public class ControlBar {
 	private JTextField waitAmount[];
 	private JTextField trainSeats[];
 	private JTextField trainTaken[];
+	private JTextField currentStation[];
 	private JLabel trainLabel[];
 	private JLabel lblSeats;
 	private JLabel lblTaken;
 	private JSlider trainSpeed;
 	private JSlider passengerSpeed;
+	private JSlider passengerRate;
+	private JSlider trainRate;
 	private JTextArea console;
+	private JComboBox deployNumber;
+	private JComboBox returnNumber;
+	private JSpinner deploySeats;
+	private JSpinner arriveStation;
+	private JSpinner departStation;
+	private String trains[];
+	private Color colors[];
 	
 	public ControlBar(int x, int y, String title) {
 		initialize(x,y,title);
@@ -55,13 +65,24 @@ public class ControlBar {
 		return passengerSpeed.getValue();
 	}
 	
+	public int getTrainRate() {
+		return trainRate.getValue();
+	}
+	
+	public int getPassengerRate() {
+		return passengerRate.getValue();
+	}
+	
 	public void updateConsole(String text) {
 		console.append(text+"\n");
 	}
 	
 	public void deployTrain(int trainNumber, int seats) {
 		trainLabel[trainNumber].setEnabled(true);
-		trainLabel[trainNumber].setBackground(Color.WHITE);
+		trainLabel[trainNumber].setBackground(colors[trainNumber]);
+		trainLabel[trainNumber].setForeground(colors[trainNumber]);
+		currentStation[trainNumber].setEnabled(true);
+		currentStation[trainNumber].setBackground(Color.WHITE);
 		trainSeats[trainNumber].setEnabled(true);
 		trainSeats[trainNumber].setText(Integer.toString(seats));
 		trainSeats[trainNumber].setBackground(Color.WHITE);
@@ -73,12 +94,23 @@ public class ControlBar {
 	public void demobilizeTrain(int trainNumber) {
 		trainLabel[trainNumber].setEnabled(false);
 		trainLabel[trainNumber].setBackground(Color.GRAY);
+		currentStation[trainNumber].setEnabled(false);
+		currentStation[trainNumber].setBackground(Color.GRAY);
+		currentStation[trainNumber].setText("0");
 		trainSeats[trainNumber].setEnabled(false);
 		trainSeats[trainNumber].setText("0");
 		trainSeats[trainNumber].setBackground(Color.GRAY);
 		trainTaken[trainNumber].setEnabled(false);
 		trainTaken[trainNumber].setText("0");
 		trainTaken[trainNumber].setBackground(Color.GRAY);
+	}
+	
+	public void updateTrainTaken(int trainNumber, int taken) {
+		trainTaken[trainNumber].setText(Integer.toString(taken));
+	}
+	
+	public void updateTrainStation(int trainNumber, int station) {
+		currentStation[trainNumber].setText(Integer.toString(station+1));
 	}
 	
 	public void updateMonitorLock(int stationNumber, boolean isLocked) {
@@ -117,7 +149,31 @@ public class ControlBar {
 		waitAmount = new JTextField[8];
 		trainSeats = new JTextField[16];
 		trainTaken = new JTextField[16];
+		currentStation = new JTextField[16];
 		trainLabel = new JLabel[16];
+		trains = new String[16];
+		colors = new Color[16];
+		
+		for(int i = 0 ; i < 16 ; i++) {
+			trains[i] = "Train "+(i+1);
+		}
+		
+		colors[0] = Color.BLACK;
+		colors[1] = Color.BLUE;
+		colors[2] = Color.CYAN;
+		colors[3] = Color.DARK_GRAY;
+		colors[4] = Color.GRAY;
+		colors[5] = Color.GREEN;
+		colors[6] = Color.LIGHT_GRAY;
+		colors[7] = Color.MAGENTA;
+		colors[8] = Color.ORANGE;
+		colors[9] = Color.PINK;
+		colors[10] = Color.RED;
+		colors[11] = Color.WHITE;
+		colors[12] = Color.YELLOW;
+		colors[13] = new Color(65, 105, 225);
+		colors[14] = new Color(65, 105, 225);
+		colors[15] = new Color(65, 105, 225);	
 		
 		JPanel panel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
@@ -189,23 +245,31 @@ public class ControlBar {
 					.addContainerGap())
 		);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setMaximumRowCount(16);
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Train 1 (Red)"}));
+		deployNumber = new JComboBox();
+		deployNumber.setMaximumRowCount(16);
+
+		deployNumber.setModel(new DefaultComboBoxModel(trains));
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Train 1 (Red)"}));
-		comboBox_2.setMaximumRowCount(16);
+		returnNumber = new JComboBox();
+		returnNumber.setModel(new DefaultComboBoxModel(trains));
+		returnNumber.setMaximumRowCount(16);
 		
-		JButton btnDeploy_1 = new JButton("Deploy");
+		JButton btnDeploy = new JButton("Deploy");
+		btnDeploy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CalTrain.getInstance().generateTrain(deployNumber.getSelectedIndex(), (int) deploySeats.getValue());
+			}
+		});
 		
 		JButton btnGet = new JButton("Demobilize");
+		btnGet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CalTrain.getInstance().demobilizeTrain(returnNumber.getSelectedIndex());
+			}
+		});
 		
-		JSpinner spinner_2 = new JSpinner();
-		spinner_2.setModel(new SpinnerNumberModel(1, 1, 99, 1));
-		
-		JSpinner spinner_3 = new JSpinner();
-		spinner_3.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+		deploySeats = new JSpinner();
+		deploySeats.setModel(new SpinnerNumberModel(1, 1, 99, 1));
 		GroupLayout gl_panel_7 = new GroupLayout(panel_7);
 		gl_panel_7.setHorizontalGroup(
 			gl_panel_7.createParallelGroup(Alignment.LEADING)
@@ -213,32 +277,29 @@ public class ControlBar {
 					.addContainerGap()
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_7.createSequentialGroup()
-							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(deployNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(spinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(deploySeats, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnDeploy_1))
+							.addComponent(btnDeploy))
 						.addGroup(gl_panel_7.createSequentialGroup()
-							.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(spinner_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(returnNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnGet)))
-					.addContainerGap(39, Short.MAX_VALUE))
+					.addContainerGap(29, Short.MAX_VALUE))
 		);
 		gl_panel_7.setVerticalGroup(
 			gl_panel_7.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_7.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDeploy_1)
-						.addComponent(spinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(deployNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnDeploy)
+						.addComponent(deploySeats, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnGet)
-						.addComponent(spinner_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(returnNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnGet))
 					.addContainerGap(30, Short.MAX_VALUE))
 		);
 		panel_7.setLayout(gl_panel_7);
@@ -249,16 +310,22 @@ public class ControlBar {
 		
 		JLabel lblType = new JLabel("Type:");
 		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(1, 1, 8, 1));
+		arriveStation = new JSpinner();
+		arriveStation.setModel(new SpinnerNumberModel(1, 1, 8, 1));
 		
-		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setModel(new SpinnerNumberModel(1, 1, 8, 1));
+		departStation = new JSpinner();
+		departStation.setModel(new SpinnerNumberModel(1, 1, 8, 1));
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setEnabled(false);
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"2B", "A2", "21O", "Ronaldo"}));
 		
-		JButton btnDeploy = new JButton("Add");
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CalTrain.getInstance().generatePassenger(((int) arriveStation.getValue())-1, ((int) departStation.getValue())-1);
+			}
+		});
 		GroupLayout gl_panel_6 = new GroupLayout(panel_6);
 		gl_panel_6.setHorizontalGroup(
 			gl_panel_6.createParallelGroup(Alignment.LEADING)
@@ -268,16 +335,16 @@ public class ControlBar {
 						.addGroup(gl_panel_6.createSequentialGroup()
 							.addComponent(lblDepartingStation)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(spinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(departStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-							.addComponent(btnDeploy)
+							.addComponent(btnAdd)
 							.addGap(27))
 						.addGroup(gl_panel_6.createSequentialGroup()
 							.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_6.createSequentialGroup()
 									.addComponent(lblNewLabel)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(spinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addComponent(arriveStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_panel_6.createSequentialGroup()
 									.addComponent(lblType)
 									.addPreferredGap(ComponentPlacement.RELATED)
@@ -290,12 +357,12 @@ public class ControlBar {
 					.addContainerGap()
 					.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
-						.addComponent(spinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(arriveStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDepartingStation)
-						.addComponent(spinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDeploy))
+						.addComponent(departStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAdd))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblType)
@@ -317,27 +384,27 @@ public class ControlBar {
 			}
 		});
 		
-		JSlider slider = new JSlider();
-		slider.setMaximum(2100);
-		slider.setValue(1100);
-		slider.setMinimum(100);
+		passengerRate = new JSlider();
+		passengerRate.setMaximum(2100);
+		passengerRate.setValue(1100);
+		passengerRate.setMinimum(100);
 		
 		JLabel lblPassengerRate = new JLabel("Passenger Rate");
 		
 		JLabel lblTrainRate = new JLabel("Train Rate");
 		
-		JSlider slider_1 = new JSlider();
-		slider_1.setMinimum(5);
-		slider_1.setValue(55);
-		slider_1.setMaximum(105);
+		trainRate = new JSlider();
+		trainRate.setMinimum(5);
+		trainRate.setValue(55);
+		trainRate.setMaximum(105);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addGap(35)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(slider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(slider_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(passengerRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(trainRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(40, Short.MAX_VALUE))
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addGap(95)
@@ -358,11 +425,11 @@ public class ControlBar {
 					.addGap(39)
 					.addComponent(lblPassengerRate)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(slider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(passengerRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(39)
 					.addComponent(lblTrainRate)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(slider_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(trainRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(47)
 					.addComponent(tglbtnToggleAutomatic)
 					.addContainerGap(47, Short.MAX_VALUE))
@@ -440,6 +507,7 @@ public class ControlBar {
 		);
 		
 		console = new JTextArea();
+		console.setEditable(false);
 		scrollPane_1.setViewportView(console);
 		panel_8.setLayout(gl_panel_8);
 		
@@ -454,27 +522,33 @@ public class ControlBar {
 		
 		JPanel trainPanel = new JPanel();
 		scrollPane.setViewportView(trainPanel);
-		trainPanel.setLayout(new GridLayout(16, 3, 1, 1));
+		trainPanel.setLayout(new GridLayout(16, 4, 1, 1));
+		
+		JLabel lblStation_1 = new JLabel("Station");
+		lblStation_1.setFont(new Font("Serif", Font.PLAIN, 12));
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(102)
+				.addGroup(Alignment.TRAILING, gl_panel_4.createSequentialGroup()
+					.addContainerGap(69, Short.MAX_VALUE)
+					.addComponent(lblStation_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
 					.addComponent(lblSeats)
-					.addGap(36)
+					.addGap(26)
 					.addComponent(lblTaken, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(53, Short.MAX_VALUE))
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+					.addGap(33))
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
 		);
 		gl_panel_4.setVerticalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblStation_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSeats)
 						.addComponent(lblTaken))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(33, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel_4.setLayout(gl_panel_4);
 		
@@ -520,6 +594,14 @@ public class ControlBar {
 			trainLabel[i] = new JLabel(" Train "+(i+1)+":");
 			trainLabel[i].setEnabled(false);
 			trainPanel.add(trainLabel[i]);
+			
+			currentStation[i] = new JTextField();
+			currentStation[i].setText("0");
+			currentStation[i].setEditable(false);
+			currentStation[i].setColumns(1);
+			currentStation[i].setBackground(Color.GRAY);
+			currentStation[i].setEnabled(false);
+			trainPanel.add(currentStation[i]);			
 			
 			trainSeats[i] = new JTextField();
 			trainSeats[i].setText("0");

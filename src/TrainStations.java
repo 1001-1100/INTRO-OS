@@ -62,7 +62,7 @@ public class TrainStations {
 				leftPassenger.setLocation(leftPassenger.getX(),leftPassenger.getY()+1);
 			}
 			try {
-				Thread.sleep(10);
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -92,7 +92,7 @@ public class TrainStations {
 				rightPassenger.setLocation(rightPassenger.getX(),rightPassenger.getY()+1);
 			}
 			try {
-				Thread.sleep(10);
+				Thread.sleep(Interface.getInstance().getPassengerSpeed());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,7 +124,7 @@ public class TrainStations {
 		leftTrain.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
 		leftTrain.setBounds(356, 430, 60, 136);
 		graphicalPanel.add(leftTrain);
-		float initSpeed = 2;
+		double initSpeed = Interface.getInstance().getTrainSpeed();
 //		int initDistance = leftTrain.getY() - 105;
 //		int distance = initDistance;
 		while(leftTrain.getY() > 105) {
@@ -147,7 +147,7 @@ public class TrainStations {
 	}
 	
 	public void removeLeftTrain() {
-		float initSpeed = 2;
+		double initSpeed = Interface.getInstance().getTrainSpeed();
 		while(leftTrain.getY() > -130) {
 //			if(initSpeed > 1) {
 //				initSpeed -= 0.5;
@@ -169,7 +169,7 @@ public class TrainStations {
 		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
 		rightTrain.setBounds(420, -130, 60, 136);
 		graphicalPanel.add(rightTrain);
-		float initSpeed = 2;
+		double initSpeed = Interface.getInstance().getTrainSpeed();
 //		int initDistance = 90 - rightTrain.getY();
 //		int distance = initDistance;
 		while(rightTrain.getY() < 90) {
@@ -192,7 +192,7 @@ public class TrainStations {
 	}
 	
 	public void removeRightTrain() {
-		float initSpeed = 2;
+		double initSpeed = Interface.getInstance().getTrainSpeed();
 		while(rightTrain.getY() < 430) {
 //			if(initSpeed > 1) {
 //				initSpeed -= 0.5;

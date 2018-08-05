@@ -16,13 +16,11 @@ public class Station {
 		trainLock.lock_acquire();
 		Interface.getInstance().updateStationLock(stationNumber, true);
 		Interface.getInstance().addTrain(stationNumber);
-		if(!CalTrain.getInstance().isTurbo()) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		count = passengerMonitor.decrement(count);
 		Interface.getInstance().removeTrain(stationNumber);

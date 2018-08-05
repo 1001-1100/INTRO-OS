@@ -59,7 +59,16 @@ public class Interface {
 	}
 	
 	public synchronized void updateConsole(String text) {
+		cB.updateConsole(text);
 	}
+	
+	public void deployTrain(int trainNumber, int seats) {
+		cB.deployTrain(trainNumber, seats);
+	}
+	
+	public void demobilizeTrain(int trainNumber) {
+		cB.demobilizeTrain(trainNumber);
+	}	
 	
 	public void addPassenger(int stationNumber) {
 		if(stationNumber == 0) {
@@ -184,12 +193,20 @@ public class Interface {
 
 	};
 	
+	public int getTrainSpeed() {
+		return 6-cB.getTrainSpeed();
+	}
+	
+	public int getPassengerSpeed() {
+		return 16-cB.getPassengerSpeed();
+	}
+	
 	private void initialize() {
 		t1 = new StartStation(0,465, "Train Station 1 and 2");
 		t2 = new TrainStations(0,0, "Train Station 3 and 4");
 		t3 = new TrainStations(847,465, "Train Station 5 and 6");
 		t4 = new EndStation(847,0, "Train Station 7 and 8");
-		cB = new ControlBar(1460,730,"Control Bar");
+		cB = new ControlBar(1600,0,"Control Bar");
 	}
 		
 }

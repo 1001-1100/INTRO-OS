@@ -1,18 +1,23 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class CalTrain {
 	
 	private static CalTrain calTrain = null;
 	private Station[] stations;
+	private Train[] trains;
+	private ArrayList<Integer> availableTrains;
 	private int totalPassengers;
 	private int waitingPassengers;
 	private int totalTrains;
 	private boolean turboMode = true;
+	private boolean isAuto = false;
 	
 	private CalTrain() {
 		totalPassengers = 0;
 		waitingPassengers = 0;
 		totalTrains = 0;
+		availableTrains = new ArrayList<>();
 		Interface.getInstance().setTotalPassenger(totalPassengers);
 		Interface.getInstance().setWaitingPassenger(waitingPassengers);
 		Interface.getInstance().setTotalTrain(totalTrains);
@@ -22,9 +27,10 @@ public class CalTrain {
 			stations[i].stationNumber = i;
 			stations[i].station_init();
 		}
-			
-		generatePassengers();
-		generateTrains();
+		trains = new Train[16];
+		for(int i = 0 ; i < 16 ; i++) {
+			availableTrains.add(i);
+		}
 	}
 	
 	public static CalTrain getInstance() {
@@ -43,25 +49,36 @@ public class CalTrain {
 		Interface.getInstance().setWaitingPassenger(waitingPassengers);
 	}
 	
+	public void toggleAutomatic() {
+		if(isAuto) {
+			isAuto = false;
+		}else {
+			isAuto = true;
+		}
+	}
+	
+	public void automaticMode() {
+		generatePassengers();
+		generateTrains();
+	}
+	
 	public void generatePassengers() {
 		Thread t = new Thread() {
 			public void run() {
 				Random rand = new Random();
 				Passenger p;
-				while(true) {
+				while(isAuto) {
 					p = new Passenger(stations);
 					totalPassengers += 1;
 					waitingPassengers += 1;
 					Interface.getInstance().setTotalPassenger(totalPassengers);
 					Interface.getInstance().setWaitingPassenger(waitingPassengers);
-					//if(!CalTrain.getInstance().isTurbo()) {
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					//}				
+					try {
+						Thread.sleep(1500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}			
 				}
 			}
 		};
@@ -73,18 +90,19 @@ public class CalTrain {
 			public void run() {
 				Random rand = new Random();
 				Train t;
-				while(true) {
-					t = new Train(stations);	
-					totalTrains += 1;
-					Interface.getInstance().setTotalTrain(totalTrains);
-					//if(!CalTrain.getInstance().isTurbo()) {
+				while(isAuto) {
+					if(availableTrains.get(0) != null) {
+						t = new Train(stations,availableTrains.get(0));	
+						availableTrains.remove(0);
+						totalTrains += 1;
+						Interface.getInstance().setTotalTrain(totalTrains);
 						try {
 							Thread.sleep(5000);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					//}
+					}
 				}
 			}
 		};

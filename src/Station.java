@@ -57,6 +57,7 @@ public class Station {
 			}
 			Interface.getInstance().updateStationLock(stationNumber, false);
 			trainLock.lock_release();	
+			return count;	
 		}else {
 			try {
 				trainMutex.acquire();

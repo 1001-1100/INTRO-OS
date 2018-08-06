@@ -47,9 +47,32 @@ public class Train {
 			Interface.getInstance().deployTrain(trainNumber, totalSeats);
 			t.start();			
 		}else {
+			isMobilized = true;
+			unboardedSeats = 0;
+			this.trainNumber = trainNumber;
+			Random rand = new Random();
+			stationSema = new Semaphore[8];
 			for(int i = 0 ; i < 8 ; i++) {
 				stationSema[i] = new Semaphore(0);
 			}
+			totalSeats = rand.nextInt(99)+1;
+			remainingSeats = totalSeats;
+			Interface.getInstance().updateConsole("Train with "+remainingSeats+" seats spawned!");
+			Thread t = new Thread() {
+				public void run() {
+					while(isMobilized) {
+						for(currentStation = 0; currentStation < 8 ; currentStation++) {
+							Interface.getInstance().updateTrainStation(trainNumber, currentStation);
+							remainingSeats = stations[currentStation].station_load_train(remainingSeats, trainNumber);
+						}					
+					}
+					Interface.getInstance().demobilizeTrain(trainNumber);
+					CalTrain.getInstance().addAvailableTrain(trainNumber);
+					Interface.getInstance().updateConsole("Train "+trainNumber+" has been demobilized!");
+				}
+			};
+			Interface.getInstance().deployTrain(trainNumber, totalSeats);
+			t.start();	
 		}
 
 	}

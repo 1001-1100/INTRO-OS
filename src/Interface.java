@@ -26,38 +26,31 @@ public class Interface {
 		rightPassenger idle: 495 131
 	 */
 	
-	private Interface() {
+	private Interface(boolean semaphoreMode) {
+		this.semaphoreMode = semaphoreMode;
 		initialize();
 		startSimulation();
 	}
 	
 	public static Interface getInstance() {
-		if(window == null) {
-			window = new Interface();
-			window.semaphoreMode = false;
-		}
 		return window;
 	}
 	
 	public static void toSemaphore() {
 		if(window == null) {
-			window = new Interface();
-			window.semaphoreMode = true;
+			window = new Interface(true);
 		}else {
 			window.disposeGUI();
-			window = new Interface();
-			window.semaphoreMode = true;			
+			window = new Interface(true);			
 		}
 	}
 	
 	public static void toMonitor() {
 		if(window == null) {
-			window = new Interface();
-			window.semaphoreMode = false;
+			window = new Interface(false);
 		}else {
 			window.disposeGUI();
-			window = new Interface();
-			window.semaphoreMode = false;			
+			window = new Interface(false);		
 		}	
 	}
 	

@@ -10,6 +10,7 @@ public class Station {
 	TrainCondition trainCondition;
 	
 	//SEMAPHORES
+	int count;
 	Semaphore trainMutex;
 	Semaphore passengerMutex;
 	Semaphore passengerWaiting;
@@ -82,7 +83,8 @@ public class Station {
 			count += CalTrain.getInstance().getTrain(trainNumber).unboardedSeats;
 			CalTrain.getInstance().getTrain(trainNumber).unboardedSeats = 0;
 			passengerMutex.release();
-			if(passengerWaiting.hasQueuedThreads()) {
+			this.count = count;
+			if(passengerWaiting.hasQueuedThreads() && count > 0) {
 				passengerWaiting.release(count);
 				try {
 					lastPassenger.acquire();
@@ -110,7 +112,7 @@ public class Station {
 			trainMutex.release();
 			passengerMutex.release();
 		}
-		return count;		
+		return this.count;		
 
 	}	
 	
@@ -140,10 +142,13 @@ public class Station {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			count -= 1;
 			Interface.getInstance().removePassenger(stationNumber);
 			Interface.getInstance().updateMonitorLock(stationNumber, false);
-			if(passengerWaiting.availablePermits() == 0 || !passengerWaiting.hasQueuedThreads()) {
-				lastPassenger.release();
+			synchronized(this) {
+				if(passengerWaiting.availablePermits() == 0 || !passengerWaiting.hasQueuedThreads()) {
+					lastPassenger.release();
+				}				
 			}
 			passengerMutex.release();
 		}		

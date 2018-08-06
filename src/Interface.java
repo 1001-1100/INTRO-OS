@@ -7,6 +7,7 @@ public class Interface {
 	TrainStations t3;
 	EndStation t4;
 	ControlBar cB;
+	boolean semaphoreMode;
 	
 	/* Graphical Info:
 	 	left start: 356, 430
@@ -33,8 +34,35 @@ public class Interface {
 	public static Interface getInstance() {
 		if(window == null) {
 			window = new Interface();
+			window.semaphoreMode = false;
 		}
 		return window;
+	}
+	
+	public static void toSemaphore() {
+		if(window == null) {
+			window = new Interface();
+			window.semaphoreMode = true;
+		}else {
+			window.disposeGUI();
+			window = new Interface();
+			window.semaphoreMode = true;			
+		}
+	}
+	
+	public static void toMonitor() {
+		if(window == null) {
+			window = new Interface();
+			window.semaphoreMode = false;
+		}else {
+			window.disposeGUI();
+			window = new Interface();
+			window.semaphoreMode = false;			
+		}	
+	}
+	
+	public boolean isSemaphore() {
+		return semaphoreMode;
 	}
 	
 	public void updateStationLock(int stationNumber, boolean isLocked) {
@@ -218,7 +246,7 @@ public class Interface {
 			}
 		};
 		t.start();
-
+		
 	};
 	
 	public int getTrainSpeed() {
@@ -237,12 +265,25 @@ public class Interface {
 		return 2100-cB.getPassengerRate();
 	}
 	
+	private void disposeGUI() {
+		t1.dispose();
+		t2.dispose();
+		t3.dispose();
+		t4.dispose();
+		cB.dispose();
+	}
+	
 	private void initialize() {
 		t1 = new StartStation(0,465, "Train Station 1 and 2");
 		t2 = new TrainStations(0,0, "Train Station 3 and 4");
 		t3 = new TrainStations(847,465, "Train Station 5 and 6");
 		t4 = new EndStation(847,0, "Train Station 7 and 8");
 		cB = new ControlBar(1600,0,"Control Bar");
+		if(semaphoreMode) {
+			cB.toSemaphore();
+		}else {
+			cB.toMonitor();
+		}
 	}
 		
 }

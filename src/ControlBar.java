@@ -52,9 +52,14 @@ public class ControlBar {
 	private JSpinner departStation;
 	private String trains[];
 	private Color colors[];
+	private JButton btnSemaphores;
 	
 	public ControlBar(int x, int y, String title) {
-		initialize(x,y,title);
+		initialize(x,y);
+	}
+	
+	public void dispose() {
+		frame.dispose();
 	}
 	
 	public int getTrainSpeed() {
@@ -138,11 +143,18 @@ public class ControlBar {
 		waitAmount[stationNumber].setText(Integer.toString(amount));
 	}	
 	
-	private void initialize(int x, int y, String title) {
+	public void toMonitor() {
+		frame.setTitle("Control Bar : Monitors");
+	}
+	
+	public void toSemaphore() {
+		frame.setTitle("Control Bar : Semaphores");
+	}
+	
+	private void initialize(int x, int y) {
 		frame = new JFrame();
 		frame.setBounds(x, y, 318, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle(title);
 		
 		tLock = new JTextField[8];
 		pLock = new JTextField[8];
@@ -453,22 +465,42 @@ public class ControlBar {
 		passengerSpeed.setValue(8);
 		passengerSpeed.setMinimum(1);
 		passengerSpeed.setMaximum(15);
+		
+		btnSemaphores = new JButton("Switch to Semaphores");
+		btnSemaphores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(!Interface.getInstance().isSemaphore()) {
+					btnSemaphores.setText("Switch to Monitors");
+					Interface.toSemaphore();
+					CalTrain.refreshInstance();
+				}else {
+					btnSemaphores.setText("Switch to Semaphores");		
+					Interface.toMonitor();
+					CalTrain.refreshInstance();
+				}
+			}
+		});
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addContainerGap(43, Short.MAX_VALUE)
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-							.addComponent(passengerSpeed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(trainSpeed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panel_5.createSequentialGroup()
-								.addGap(72)
-								.addComponent(lblTrainSpeed)))
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+									.addComponent(passengerSpeed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(trainSpeed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_panel_5.createSequentialGroup()
+										.addGap(72)
+										.addComponent(lblTrainSpeed)))
+								.addGroup(gl_panel_5.createSequentialGroup()
+									.addComponent(lblPassengerSpeed)
+									.addGap(58)))
+							.addGap(32))
 						.addGroup(Alignment.TRAILING, gl_panel_5.createSequentialGroup()
-							.addComponent(lblPassengerSpeed)
-							.addGap(58)))
-					.addGap(32))
+							.addComponent(btnSemaphores)
+							.addGap(67))))
 		);
 		gl_panel_5.setVerticalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
@@ -481,7 +513,9 @@ public class ControlBar {
 					.addComponent(lblTrainSpeed)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(trainSpeed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(106, Short.MAX_VALUE))
+					.addGap(32)
+					.addComponent(btnSemaphores)
+					.addContainerGap(76, Short.MAX_VALUE))
 		);
 		panel_5.setLayout(gl_panel_5);
 		

@@ -12,8 +12,9 @@ public class Main {
 			public void run() {
 				try {
 					Main main = new Main();
-					//847, 465
-					Interface.getInstance();
+					
+					ChooseMenu cm = new ChooseMenu();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

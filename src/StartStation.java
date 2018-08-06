@@ -45,6 +45,10 @@ public class StartStation {
 	rightPassenger idle: 495 131
  */
 	
+	public void dispose() {
+		frame.dispose();
+	}
+	
 	public void unloadLeftPassenger() {
 		leftPassengerSpriteLock.lock_acquire();
 		JLabel leftPassenger = new JLabel();

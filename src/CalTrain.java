@@ -10,7 +10,6 @@ public class CalTrain {
 	private int totalPassengers;
 	private int waitingPassengers;
 	private int totalTrains;
-	private boolean turboMode = true;
 	private boolean isAuto = false;
 	
 	private CalTrain() {
@@ -40,8 +39,9 @@ public class CalTrain {
 		return calTrain;
 	}
 	
-	public boolean isTurbo() {
-		return turboMode;
+	public static void refreshInstance() {
+		calTrain = null;
+		calTrain = new CalTrain();
 	}
 	
 	public Train getTrain(int trainNumber) {

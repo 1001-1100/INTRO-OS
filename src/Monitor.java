@@ -34,7 +34,7 @@ public class Monitor {
 		monitorLock.lock_acquire();
 		j = count;
 		Interface.getInstance().updateMonitorLock(stationNumber, true);
-		while(i > 0 && count > 0) {
+		while(i > 0 && j > 0) {
 			cond.cond_signal(monitorLock);
 			monitorLock.lock_acquire(); // DANGER ZONE
 			Interface.getInstance().updateMonitorLock(stationNumber, true);

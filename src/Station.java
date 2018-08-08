@@ -36,7 +36,7 @@ public class Station {
 			trainLock.lock_acquire();
 			this.currentTrain = CalTrain.getInstance().getTrain(trainNumber);
 			Interface.getInstance().updateStationLock(stationNumber, true);
-			Interface.getInstance().addTrain(stationNumber);
+			Interface.getInstance().addTrain(stationNumber, trainNumber);
 			CalTrain.getInstance().getTrain(trainNumber).unloadTrain(stationNumber);
 			try {
 				Thread.sleep(500);
@@ -67,7 +67,7 @@ public class Station {
 			}
 			this.currentTrain = CalTrain.getInstance().getTrain(trainNumber);
 			Interface.getInstance().updateStationLock(stationNumber, true);
-			Interface.getInstance().addTrain(stationNumber);
+			Interface.getInstance().addTrain(stationNumber, trainNumber);
 			CalTrain.getInstance().getTrain(trainNumber).unloadTrain(stationNumber);
 			try {
 				Thread.sleep(500);

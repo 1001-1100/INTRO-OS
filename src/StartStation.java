@@ -3,10 +3,16 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JLabel;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class StartStation {
@@ -52,7 +58,7 @@ public class StartStation {
 	public void unloadLeftPassenger() {
 		leftPassengerSpriteLock.lock_acquire();
 		JLabel leftPassenger = new JLabel();
-		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2MoveLeft.png")));
+		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveLeft.png")));
 		leftPassenger.setBounds(356, 135, 84, 73);
 		graphicalPanel.setLayer(leftPassenger, -1);
 		graphicalPanel.add(leftPassenger);
@@ -84,7 +90,7 @@ public class StartStation {
 	public void unloadRightPassenger() {
 		rightPassengerSpriteLock.lock_acquire();
 		JLabel rightPassenger = new JLabel();
-		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2MoveRight.png")));
+		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveRight.png")));
 		rightPassenger.setBounds(420, 135, 84, 73);
 		graphicalPanel.setLayer(rightPassenger, -1);
 		graphicalPanel.add(rightPassenger);
@@ -208,23 +214,39 @@ public class StartStation {
 		graphicalPanel.remove(rightPassenger);
 	}
 	
-	public void addLeftTrain() {
+    private BufferedImage colorImage(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        WritableRaster raster = image.getRaster();
+
+        for (int xx = 0; xx < width; xx++) {
+            for (int yy = 0; yy < height; yy++) {
+                int[] pixels = raster.getPixel(xx, yy, (int[]) null);
+                pixels[0] = 0;
+                pixels[1] = 0;
+                pixels[2] = 255;
+                raster.setPixel(xx, yy, pixels);
+            }
+        }
+        return image;
+    }	
+	
+	public void addLeftTrain(int trainNumber) {
 		leftTrain = new JLabel();
-		leftTrain.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
+		BufferedImage bi;
+		try {
+			bi = ImageIO.read((Interface.class.getResource("/train.png")));
+			leftTrain.setIcon((Icon) bi);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		leftTrain.setBounds(356, 430, 60, 136);
 		graphicalPanel.add(leftTrain);
 		double initSpeed = Interface.getInstance().getTrainSpeed();
 //		int initDistance = leftTrain.getY() - 105;
 //		int distance = initDistance;
 		while(leftTrain.getY() > 105) {
-//			if(initSpeed > 1 && distance > initDistance/2 && distance % 2 == 1) {
-//				initSpeed -= 1;
-//			}else{
-//				if(initSpeed < 4) {
-//					initSpeed += 1;
-//				}
-//			}
-//			distance -= 1;
 			leftTrain.setLocation(leftTrain.getX(), leftTrain.getY()-1);
 			try {
 				Thread.sleep((long) initSpeed);
@@ -253,7 +275,7 @@ public class StartStation {
 		graphicalPanel.remove(leftTrain);
 	}
 	
-	public void addRightTrain() {
+	public void addRightTrain(int trainNumber) {
 		rightTrain = new JLabel();
 		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
 		rightTrain.setBounds(420, -130, 60, 136);

@@ -208,7 +208,7 @@ public class EndStation {
 		graphicalPanel.remove(rightPassenger);
 	}
 	
-	public void addLeftTrain() {
+	public void addLeftTrain(int trainNumber) {
 		leftTrain = new JLabel();
 		leftTrain.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
 		leftTrain.setBounds(356, 430, 60, 136);
@@ -253,7 +253,7 @@ public class EndStation {
 		graphicalPanel.remove(leftTrain);
 	}
 	
-	public void addRightTrain() {
+	public void addRightTrain(int trainNumber) {
 		rightTrain = new JLabel();
 		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
 		rightTrain.setBounds(420, -130, 60, 136);

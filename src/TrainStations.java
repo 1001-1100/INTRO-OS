@@ -52,7 +52,7 @@ public class TrainStations {
 	public void unloadLeftPassenger() {
 		leftPassengerSpriteLock.lock_acquire();
 		JLabel leftPassenger = new JLabel();
-		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2MoveLeft.png")));
+		leftPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveLeft.png")));
 		leftPassenger.setBounds(356, 135, 84, 73);
 		graphicalPanel.setLayer(leftPassenger, -1);
 		graphicalPanel.add(leftPassenger);
@@ -84,7 +84,7 @@ public class TrainStations {
 	public void unloadRightPassenger() {
 		rightPassengerSpriteLock.lock_acquire();
 		JLabel rightPassenger = new JLabel();
-		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/A2MoveRight.png")));
+		rightPassenger.setIcon(new ImageIcon(Interface.class.getResource("/2bMoveRight.png")));
 		rightPassenger.setBounds(420, 135, 84, 73);
 		graphicalPanel.setLayer(rightPassenger, -1);
 		graphicalPanel.add(rightPassenger);
@@ -208,7 +208,7 @@ public class TrainStations {
 		graphicalPanel.remove(rightPassenger);
 	}
 	
-	public void addLeftTrain() {
+	public void addLeftTrain(int trainNumber) {
 		leftTrain = new JLabel();
 		leftTrain.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
 		leftTrain.setBounds(356, 430, 60, 136);
@@ -253,7 +253,7 @@ public class TrainStations {
 		graphicalPanel.remove(leftTrain);
 	}
 	
-	public void addRightTrain() {
+	public void addRightTrain(int trainNumber) {
 		rightTrain = new JLabel();
 		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
 		rightTrain.setBounds(420, -130, 60, 136);

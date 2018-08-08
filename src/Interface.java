@@ -159,23 +159,23 @@ public class Interface {
 		}
 	}
 	
-	public void addTrain(int stationNumber) {
+	public void addTrain(int stationNumber, int trainNumber) {
 		if(stationNumber == 0) {
-			t1.addLeftTrain();
+			t1.addLeftTrain(trainNumber);
 		}else if(stationNumber == 1) {
-			t2.addLeftTrain();
+			t2.addLeftTrain(trainNumber);
 		}else if(stationNumber == 2) {
-			t3.addLeftTrain();
+			t3.addLeftTrain(trainNumber);
 		}else if(stationNumber == 3) {
-			t4.addLeftTrain();
+			t4.addLeftTrain(trainNumber);
 		}else if(stationNumber == 4) {
-			t4.addRightTrain();
+			t4.addRightTrain(trainNumber);
 		}else if(stationNumber == 5) {
-			t3.addRightTrain();
+			t3.addRightTrain(trainNumber);
 		}else if(stationNumber == 6) {
-			t2.addRightTrain();
+			t2.addRightTrain(trainNumber);
 		}else if(stationNumber == 7) {
-			t1.addRightTrain();
+			t1.addRightTrain(trainNumber);
 		}
 	}
 	
@@ -199,31 +199,31 @@ public class Interface {
 		}
 	}	
 	
-	public void moveTrain(int stationNumber) {
+	public void moveTrain(int stationNumber, int trainNumber) {
 		if(stationNumber == 0) {
 			t1.removeLeftTrain();
-			t2.addLeftTrain();
+			t2.addLeftTrain(trainNumber);
 		}else if(stationNumber == 1) {
 			t2.removeLeftTrain();
-			t3.addLeftTrain();
+			t3.addLeftTrain(trainNumber);
 		}else if(stationNumber == 2) {
 			t3.removeLeftTrain();
-			t4.addLeftTrain();
+			t4.addLeftTrain(trainNumber);
 		}else if(stationNumber == 3) {
 			t4.removeLeftTrain();
-			t4.addRightTrain();
+			t4.addRightTrain(trainNumber);
 		}else if(stationNumber == 4) {
 			t4.removeRightTrain();
-			t3.addRightTrain();
+			t3.addRightTrain(trainNumber);
 		}else if(stationNumber == 5) {
 			t3.removeRightTrain();
-			t2.addRightTrain();
+			t2.addRightTrain(trainNumber);
 		}else if(stationNumber == 6) {
 			t2.removeRightTrain();
-			t1.addRightTrain();
+			t1.addRightTrain(trainNumber);
 		}else if(stationNumber == 7) {
 			t1.removeRightTrain();
-			t1.addLeftTrain();
+			t1.addLeftTrain(trainNumber);
 		}
 	}
 	

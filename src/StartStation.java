@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JLabel;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -212,31 +213,14 @@ public class StartStation {
 			}
 		}
 		graphicalPanel.remove(rightPassenger);
-	}
-	
-    private BufferedImage colorImage(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        WritableRaster raster = image.getRaster();
-
-        for (int xx = 0; xx < width; xx++) {
-            for (int yy = 0; yy < height; yy++) {
-                int[] pixels = raster.getPixel(xx, yy, (int[]) null);
-                pixels[0] = 0;
-                pixels[1] = 0;
-                pixels[2] = 255;
-                raster.setPixel(xx, yy, pixels);
-            }
-        }
-        return image;
-    }	
+	}	
 	
 	public void addLeftTrain(int trainNumber) {
 		leftTrain = new JLabel();
-		BufferedImage bi;
 		try {
+			BufferedImage bi;
 			bi = ImageIO.read((Interface.class.getResource("/train.png")));
-			leftTrain.setIcon((Icon) bi);
+			leftTrain.setIcon(new ImageIcon(Interface.getInstance().colorImage(bi,30*trainNumber)));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -277,7 +261,14 @@ public class StartStation {
 	
 	public void addRightTrain(int trainNumber) {
 		rightTrain = new JLabel();
-		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
+		try {
+			BufferedImage bi;
+			bi = ImageIO.read((Interface.class.getResource("/trainRev.png")));
+			rightTrain.setIcon(new ImageIcon(Interface.getInstance().colorImage(bi,30*trainNumber)));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		rightTrain.setBounds(420, -130, 60, 136);
 		graphicalPanel.add(rightTrain);
 		double initSpeed = Interface.getInstance().getTrainSpeed();

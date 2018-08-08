@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 public class Interface {
 
@@ -57,6 +59,30 @@ public class Interface {
 	public boolean isSemaphore() {
 		return semaphoreMode;
 	}
+	
+    public BufferedImage colorImage(BufferedImage raw, int hueValue) {
+        int width = raw.getWidth();
+        int height = raw.getHeight();
+        float hue = hueValue/360.0f;
+        
+        BufferedImage processed = new BufferedImage(width, height, raw.getType());
+        for(int i = 0 ; i < height ; i++) {
+        	for(int j = 0 ; j < width ; j++) {
+        		int RGB = raw.getRGB(j, i);
+        		if((RGB >> 24) != 0x00) {
+            		int R = (RGB >> 16) & 0xff; 
+            		int G = (RGB >> 8) & 0xff;
+            		int B = (RGB) & 0xff;
+            		float HSV[] = new float[3];
+            		Color.RGBtoHSB(R,G,B,HSV);
+            		processed.setRGB(j, i, Color.getHSBColor(hue,HSV[1],HSV[2]).getRGB());	
+        		}
+        	}
+        }
+        
+        return processed;
+        
+    }
 	
 	public void updateStationLock(int stationNumber, boolean isLocked) {
 		cB.updateStationLock(stationNumber, isLocked);

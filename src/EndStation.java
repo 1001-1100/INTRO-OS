@@ -3,8 +3,11 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JLabel;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -210,7 +213,14 @@ public class EndStation {
 	
 	public void addLeftTrain(int trainNumber) {
 		leftTrain = new JLabel();
-		leftTrain.setIcon(new ImageIcon(Interface.class.getResource("/train.png")));
+		try {
+			BufferedImage bi;
+			bi = ImageIO.read((Interface.class.getResource("/train.png")));
+			leftTrain.setIcon(new ImageIcon(Interface.getInstance().colorImage(bi,30*trainNumber)));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		leftTrain.setBounds(356, 430, 60, 136);
 		graphicalPanel.add(leftTrain);
 		double initSpeed = Interface.getInstance().getTrainSpeed();
@@ -255,8 +265,14 @@ public class EndStation {
 	
 	public void addRightTrain(int trainNumber) {
 		rightTrain = new JLabel();
-		rightTrain.setIcon(new ImageIcon(Interface.class.getResource("/trainRev.png")));
-		rightTrain.setBounds(420, -130, 60, 136);
+		try {
+			BufferedImage bi;
+			bi = ImageIO.read((Interface.class.getResource("/trainRev.png")));
+			rightTrain.setIcon(new ImageIcon(Interface.getInstance().colorImage(bi,30*trainNumber)));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		graphicalPanel.add(rightTrain);
 		double initSpeed = Interface.getInstance().getTrainSpeed();
 //		int initDistance = 90 - rightTrain.getY();
